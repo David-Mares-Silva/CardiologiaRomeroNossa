@@ -20,8 +20,14 @@ def _send(to_addr: str, subject: str, fields: list[tuple[str, str]], reply_to: s
     msg["Reply-To"] = reply_to
     msg.set_content("\n".join(f"{label}: {value}" for label, value in fields))
 
-    with smtplib.SMTP(os.environ["SMTP_HOST"], int(os.environ.get("SMTP_PORT", 587))) as server:
-        server.starttls()
+    host = os.environ["SMTP_HOST"]
+    port = int(os.environ.get("SMTP_PORT", 587))
+    # Port 465 is implicit TLS (SMTPS); everything else (587, 25) uses STARTTLS.
+    smtp_cls = smtplib.SMTP_SSL if port == 465 else smtplib.SMTP
+
+    with smtp_cls(host, port) as server:
+        if port != 465:
+            server.starttls()
         server.login(os.environ["SMTP_USER"], os.environ["SMTP_PASSWORD"])
         server.send_message(msg)
 
