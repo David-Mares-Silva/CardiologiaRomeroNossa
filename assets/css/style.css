@@ -113,6 +113,29 @@ h6 {
   opacity: 1;
 }
 
+.whatsapp-btn {
+  position: fixed;
+  left: 15px;
+  bottom: 15px;
+  z-index: 996;
+  background: #25D366;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s;
+}
+
+.whatsapp-btn i {
+  font-size: 30px;
+  color: #fff;
+  line-height: 0;
+}
+
+.whatsapp-btn:hover {
+  background: #1ebc59;
+}
+
 .datepicker-dropdown {
   padding: 20px !important;
 }
@@ -1535,6 +1558,49 @@ section {
 .contact .info .phone:hover i {
   background: #EA0020;
   color: #fff;
+}
+
+/*--------------------------------------------------------------
+# Sedes
+--------------------------------------------------------------*/
+.sedes .info {
+  width: 100%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.sedes .info i {
+  font-size: 20px;
+  color: #EA0020;
+  float: left;
+  width: 44px;
+  height: 44px;
+  background: #fad6d6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  transition: all 0.3s ease-in-out;
+}
+
+.sedes .info h4 {
+  padding: 0 0 0 60px;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #642c2c;
+}
+
+.sedes .info p {
+  padding: 0 0 0 60px;
+  margin-bottom: 0;
+  font-size: 14px;
+  color: #ab4b4b;
+}
+
+.sedes .info .phone {
+  margin-top: 20px;
 }
 
 .contact .php-email-form {

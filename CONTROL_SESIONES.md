@@ -28,6 +28,62 @@ Bitácora del avance del proyecto (sitio web Dra. Romero Nossa), sesión por ses
 
 ---
 
+## 2026-09-08 (2) - Aviso de Privacidad + botón de WhatsApp
+
+**Objetivo del día:**
+- Agregar la sección de aviso de privacidad pendiente de la sesión anterior, y un botón de WhatsApp.
+
+**Hecho:**
+- Nueva página `privacidad.html` con el Aviso de Privacidad / tratamiento de datos personales (Ley 1581 de 2012 y Decreto 1377 de 2013, Colombia): responsable, datos recolectados, finalidad, derechos del titular, cómo ejercerlos, vigencia. Usa el header/footer reales del sitio (no la plantilla genérica de `inner-page.html`). Marcada `noindex, follow` y excluida del `sitemap.xml` a propósito.
+- Enlazada desde el footer ("Aviso de Privacidad", antes un `href="#"` muerto) y con una línea debajo de ambos formularios ("Al enviar este formulario aceptas nuestro Aviso de Privacidad").
+- De paso, traducido el mensaje de éxito del formulario de cita, que seguía en inglés.
+- Agregado botón flotante de WhatsApp (`https://wa.me/573001863974`, con mensaje prellenado) en `index.html` y `privacidad.html`, abajo a la izquierda para no chocar con el botón "volver arriba".
+- Verificado en Docker: `/privacidad.html` responde 200, el botón de WhatsApp y los 3 enlaces nuevos aparecen en el HTML servido.
+
+**Pendiente / próximos pasos:**
+- **El aviso de privacidad es un borrador de buena fe, no fue revisado por un abogado** — recomendable que alguien con criterio legal lo revise antes de considerarlo definitivo.
+- El número de WhatsApp (+57 300 186 3974) se usó tal como lo diste; confirmar que tiene WhatsApp Business activo y que es el número correcto para agendar citas (puede ser distinto a los teléfonos de consulta ya publicados).
+- Sigue pendiente todo lo que ya estaba anotado el 2026-09-08 (sedes adicionales, testimonios placeholder, redes sociales sin perfiles reales, consentimiento de imágenes clínicas).
+
+**Notas / decisiones:**
+- Se hizo página aparte (no una sección dentro de `index.html`) porque un aviso legal largo no encaja bien en un one-pager de scroll, y es el patrón estándar (footer → página de política).
+
+---
+
+## 2026-09-08 - Auditoría de navegación/mejores prácticas + sección de Sedes
+
+**Objetivo del día:**
+- Verificar que no haya links rotos, revisar el sitio contra mejores prácticas para sitios de especialistas médicos, y dejar un mecanismo para agregar varios centros médicos/sedes donde se da consulta.
+
+**Hecho:**
+- Corregido un enlace de navegación roto: el menú apuntaba a `#doctores` pero la sección real tenía `id="doctors"`.
+- Corregido un bug de copy real: el mensaje de éxito del formulario de contacto decía "Tu mensaje **no ha podido ser enviado**" (negativo) cuando en realidad se mostraba al enviarse correctamente.
+- Corregidos `id` duplicados entre el formulario de cita y el de contacto (`id="name"`/`id="email"` se repetían en la misma página).
+- `<html lang="en">` → `lang="es"` (el contenido siempre fue en español).
+- Agregada meta descripción/keywords reales (estaban vacías), Open Graph, Twitter Card y datos estructurados JSON-LD (`Physician`) con los datos reales ya publicados en la página (nombre, especialidad, teléfono, dirección de Yopal).
+- Agregados `robots.txt` y `sitemap.xml`, servidos por FastAPI.
+- Los teléfonos del topbar y de la sección de contacto ahora son enlaces `tel:` (antes texto plano, sin click-to-call).
+- Agregado `alt` descriptivo a las 18 imágenes informativas que lo tenían vacío (especialidades, doctores, galería) — investigadas visualmente para no inventar descripciones.
+- Corregido typo "Adriana Romero **Nosa**" → "Nossa", y los íconos sociales de los 4 doctores (`href=""`, que recargaban la página al hacer clic) → `href="#"` en lo que se agreguen perfiles reales.
+- Nueva sección **Sedes**: `assets/data/sedes.json` (mecanismo de datos, sin tocar HTML/JS para agregar una sede) + `assets/js/sedes.js` (la renderiza) + CSS. Ya tiene una sede real cargada (Medical Sky IPS, Yopal) tomada de los datos ya existentes en la página.
+- Corregido un bug real de la migración anterior: `app/main.py` montaba `StaticFiles(directory="www")`, carpeta que solo existe dentro de la imagen Docker — correr la app en local sin Docker (como decía `CLAUDE.md`) fallaba. Ahora resuelve `www/` si existe (Docker) o la raíz del repo (local), sirviendo únicamente `assets/`, `index.html`, `inner-page.html`, `robots.txt` y `sitemap.xml` explícitamente (nunca el directorio completo, para no exponer `.env` ni el código de la app).
+- Verificado con la app corriendo (con y sin Docker): todos los anchors internos resuelven, no quedan `id` duplicados reales, y las rutas nuevas responden 200.
+
+**Pendiente / próximos pasos (necesitan una decisión o dato que no tengo):**
+- **Sedes**: solo hay datos reales para Yopal. Para agregar Sogamoso (aparece como ciudad en el formulario de citas) u otras sedes, necesito nombre de la institución, dirección, teléfono y opcionalmente el link de Google Maps.
+- **Sección "Testimonios"**: existe en el HTML pero está completamente comentada (no se ve en el sitio real) y su contenido es 100% placeholder del template original (nombres como "Saul Goodman", texto en latín de relleno). Recomendación: reemplazar por testimonios reales de pacientes (con su consentimiento) o eliminar el bloque muerto.
+- **Redes sociales**: los íconos del topbar, del footer y de los 4 doctores no tienen perfiles reales enlazados. Decidir si se agregan enlaces reales o se quitan los íconos.
+- **WhatsApp**: es muy usado en sitios médicos de LatAm para agendar citas; se puede agregar un botón flotante de click-to-chat si alguno de los teléfonos ya publicados tiene WhatsApp activo — falta confirmar cuál.
+- **Aviso de privacidad / tratamiento de datos**: el sitio recolecta nombre, correo, teléfono y motivo de consulta por formulario sin ningún aviso de privacidad — recomendable para cumplir la Ley 1581 de 2012 (Habeas Data, Colombia). No redacté texto legal — requiere revisión de alguien con criterio legal.
+- **Privacidad de imágenes clínicas**: la galería incluye una foto de un electrocardiograma con una conclusión diagnóstica real y una foto de un procedimiento quirúrgico. Confirmar que se cuenta con consentimiento para publicarlas.
+- Sigue pendiente el destino de `reporte.html`, `reporte 2.html`, `reporte 3.html` y los archivos sueltos sin commitear.
+
+**Notas / decisiones:**
+- El mecanismo de sedes es deliberadamente simple (un JSON + un script, sin base de datos ni backend nuevo) para mantener la filosofía de imagen Docker ligera ya establecida.
+- La imagen "medical-sky-ips.jpg" de la galería reveló que "Medical Sky IPS" es la institución real donde se da consulta en Yopal — se usó esa marca para la primera sede.
+
+---
+
 ## 2026-09-07 - Migración a FastAPI + Docker + CI/CD
 
 **Objetivo del día:**

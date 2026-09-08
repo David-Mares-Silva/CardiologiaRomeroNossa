@@ -23,7 +23,7 @@ WORKDIR /app
 
 COPY --from=builder /app/.venv /app/.venv
 COPY app ./app
-COPY index.html inner-page.html ./www/
+COPY index.html inner-page.html privacidad.html robots.txt sitemap.xml ./www/
 COPY assets ./www/assets
 
 ENV PATH="/app/.venv/bin:$PATH"
