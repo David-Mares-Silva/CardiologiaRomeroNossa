@@ -28,6 +28,30 @@ Bitácora del avance del proyecto (sitio web Dra. Romero Nossa), sesión por ses
 
 ---
 
+## 2026-09-08 (3) - Fix de agendamiento de cita, ícono, segunda sede y testimonios
+
+**Objetivo del día:**
+- Arreglar el reporte de que "el botón de fecha no funciona" y el error al agendar cita; agregar un ícono de corazón; agregar la sede de CEMEDIC; reemplazar los textos en latín por contenido real.
+
+**Hecho:**
+- El campo de fecha de la cita tenía `type="datetime"` (tipo inválido, eliminado del estándar HTML5 hace años) y una clase `datepicker` de una librería que nunca estuvo incluida — el navegador lo mostraba como texto plano, sin calendario. Cambiado a `type="date"` (calendario nativo del navegador, sin dependencias).
+- El error "No se pudo agendar la cita" es un **error real de autenticación SMTP** (confirmado en logs: `535 Username and Password not accepted` de Gmail) — no es un bug, es que `.env` todavía no tiene una contraseña de aplicación de Gmail válida.
+- Agregado `logger.exception(...)` en `app/forms.py` para que la causa real de un fallo de envío quede en `docker logs` en vez de solo el mensaje genérico al usuario.
+- Reemplazado el favicon y el apple-touch-icon (antes una "B" azul genérica sin relación con el sitio) por un ícono de corazón rojo, generado con Pillow (efímero, no se agregó como dependencia del proyecto).
+- Agregada la sede **CEMEDIC - Centro Médico Quirúrgico de la Orinoquia** (`+57 310 481-8181`) en `assets/data/sedes.json`. No se tiene la dirección todavía — `sedes.js` ahora maneja `direccion`/`mapa_embed` como opcionales y muestra "Dirección por confirmar" en vez de romperse o inventar un dato.
+- Activada la sección "Testimonios" (existía pero estaba comentada) y reemplazados los 5 textos de relleno del template ("Saul Goodman", latín de relleno) por testimonios de ejemplo en español, apropiados para una consulta de cardiología pediátrica (padres/madres de paciente, sin afirmaciones médicas específicas).
+- Verificado todo reconstruyendo el contenedor local (`docker compose up --build`).
+
+**Pendiente / próximos pasos:**
+- Falta la dirección de CEMEDIC para completar esa ficha de sede.
+- **Los testimonios activados son de ejemplo, no citas reales de pacientes** — reemplazar por testimonios reales (con consentimiento) cuando estén disponibles.
+- Falta la contraseña de aplicación de Gmail (u otro proveedor SMTP) en `.env` para que los formularios realmente envíen correo.
+
+**Notas / decisiones:**
+- Se generó el ícono de corazón con un script de Python/Pillow ejecutado una sola vez (`uv run --with pillow`), no se agregó Pillow al proyecto.
+
+---
+
 ## 2026-09-08 (2) - Aviso de Privacidad + botón de WhatsApp
 
 **Objetivo del día:**

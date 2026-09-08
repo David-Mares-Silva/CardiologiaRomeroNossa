@@ -1,3 +1,4 @@
+import logging
 import os
 import smtplib
 from email.message import EmailMessage
@@ -5,6 +6,8 @@ from email.message import EmailMessage
 from fastapi import APIRouter, Form
 from fastapi.responses import PlainTextResponse
 from starlette.concurrency import run_in_threadpool
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -39,6 +42,7 @@ async def contact(
             email,
         )
     except Exception:
+        logger.exception("Failed to send contact form email")
         return PlainTextResponse("No se pudo enviar el mensaje, intenta de nuevo más tarde.", status_code=500)
     return PlainTextResponse("OK")
 
@@ -70,5 +74,6 @@ async def appointment(
             email,
         )
     except Exception:
+        logger.exception("Failed to send appointment form email")
         return PlainTextResponse("No se pudo agendar la cita, intenta de nuevo más tarde.", status_code=500)
     return PlainTextResponse("OK")

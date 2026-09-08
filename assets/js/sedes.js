@@ -28,6 +28,9 @@
     const mapa = sede.mapa_embed
       ? `<iframe style="border:0; width: 100%; height: 250px;" src="${sede.mapa_embed}" frameborder="0" allowfullscreen loading="lazy"></iframe>`
       : "";
+    const direccion = sede.direccion
+      ? `<p>${escapeHtml(sede.direccion)}</p>`
+      : `<p class="fst-italic">Dirección por confirmar</p>`;
 
     return `
       <div class="col-lg-6 mt-4">
@@ -36,7 +39,7 @@
           <div class="address mt-3">
             <i class="bi bi-hospital"></i>
             <h4>${escapeHtml(sede.institucion)}</h4>
-            <p>${escapeHtml(sede.direccion)}</p>
+            ${direccion}
           </div>
           <div class="phone">
             <i class="bi bi-phone"></i>
@@ -50,20 +53,22 @@
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.textContent = JSON.stringify(
-      sedes.map((sede) => ({
-        "@context": "https://schema.org",
-        "@type": "MedicalClinic",
-        name: sede.institucion,
-        telephone: sede.telefono,
-        address: sede.direccion,
-      }))
+      sedes
+        .filter((sede) => sede.direccion)
+        .map((sede) => ({
+          "@context": "https://schema.org",
+          "@type": "MedicalClinic",
+          name: sede.institucion,
+          telephone: sede.telefono,
+          address: sede.direccion,
+        }))
     );
     document.head.appendChild(script);
   }
 
   function escapeHtml(value) {
     const div = document.createElement("div");
-    div.textContent = value;
+    div.textContent = value == null ? "" : value;
     return div.innerHTML;
   }
 })();
