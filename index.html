@@ -305,7 +305,7 @@
           <p>Agenda tu Cita de forma rápida y segura en nuestra agenda digital. Todas las citas generadas aquí son agendadas en tiempos reales. No necesitas confirmar tu cita generada aquí, ya que nuestra sistema digital está conectado a nuestra agenda médica. </p>
         </div>
 
-        <form action="forms/appointment.php" method="post" role="form" class="php-email-form">
+        <form action="/api/appointment" method="post" role="form" class="php-email-form">
           <div class="row">
             <div class="col-md-4 form-group">
               <input type="text" name="name" class="form-control" id="name" placeholder="Tu nombre" data-rule="minlen:4" data-msg="Please enter at least 4 chars">
@@ -328,18 +328,18 @@
             <div class="col-md-4 form-group mt-3">
               <select name="department" id="department" class="form-select">
                 <option value="">Especialidad</option>
-                <option value="Department 1">Pediatría</option>
-                <option value="Department 2">Cardiología Pediátrica</option>
-                <option value="Department 3">Ecocardiografía</option>
+                <option value="Pediatría">Pediatría</option>
+                <option value="Cardiología Pediátrica">Cardiología Pediátrica</option>
+                <option value="Ecocardiografía">Ecocardiografía</option>
               </select>
               <div class="validate"></div>
             </div>
             <div class="col-md-4 form-group mt-3">
               <select name="doctor" id="doctor" class="form-select">
                 <option value="">Ciudad</option>
-                <option value="Doctor 1">Yopal</option>
-                <option value="Doctor 2">Sogamoso</option>
-                <option value="Doctor 3">Teleconsulta</option>
+                <option value="Yopal">Yopal</option>
+                <option value="Sogamoso">Sogamoso</option>
+                <option value="Teleconsulta">Teleconsulta</option>
               </select>
               <div class="validate"></div>
             </div>
@@ -891,7 +891,7 @@
 
           <div class="col-lg-8 mt-5 mt-lg-0">
 
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+            <form action="/api/contact" method="post" role="form" class="php-email-form">
               <div class="row">
                 <div class="col-md-6 form-group">
                   <input type="text" name="name" class="form-control" id="name" placeholder="Tu nombre" required>

@@ -1,0 +1,12 @@
+services:
+  web:
+    image: ghcr.io/david-mares-silva/cardiologiaromeronossa:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.cardiologia.rule=Host(`cardiologia.futurehealthlabmx.io`)
+      - traefik.http.routers.cardiologia.entrypoints=websecure
+      - traefik.http.routers.cardiologia.tls.certresolver=letsencrypt
+      - traefik.http.services.cardiologia.loadbalancer.server.port=8000

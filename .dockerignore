@@ -1,0 +1,14 @@
+.git
+.gitignore
+.github
+__pycache__/
+*.py[oc]
+.venv
+.env
+.env.*
+!.env.example
+*.md
+Instrumental.png
+reporte.html
+reporte 2.html
+reporte 3.html
